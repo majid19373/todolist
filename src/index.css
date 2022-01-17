@@ -14,4 +14,7 @@ body {
 *,*:focus{
   outline: none;
 }
+.flex1{
+  flex: 1 0;
+}
 

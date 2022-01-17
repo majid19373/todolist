@@ -1,14 +1,18 @@
 import React,{memo,useEffect,useState} from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 
 import TodoModal from './TodoModal';
 import TodoTable from './TodoTable';
+import DeleteTodoModal from './DeleteTodoModal';
+import { actions } from '../../actions';
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 const TodoList = () => {
+    const dispatch = useDispatch();
     //get all todos
     const todos = useSelector(state => state.todos);
+    const display = useSelector(state =>  state.modal);
 
     //count complate todo
     const [completet,setCompletet] = useState(0);
@@ -26,7 +30,7 @@ const TodoList = () => {
     const [text,setText] = useState('');
 
     useEffect(()=>{
-        //Get today's date to display at the top of the event todo
+        //Get today's date to display at the top of todolist
         const date = new Date();
         setYear(date.getFullYear());
         let getMonth = date.getMonth();
@@ -51,9 +55,7 @@ const TodoList = () => {
 
     const createTodo = () =>{
         //show modal for create new todo
-        const modal = document.querySelector('.modal');
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+        dispatch(actions.modal(display));
         setItemId(0);
         setText('');
         document.body.style.overflow = "hidden"
@@ -62,7 +64,7 @@ const TodoList = () => {
         <>
         <main>  
             {todos.length > 0 ?
-                <div className='bg-whiteCustom rounded-3xl p-14 mx-auto shadow-card my-16 lg:w-3/4 md:w-full'>
+                <div className='bg-whiteCustom rounded-3xl p-14 mx-auto shadow-card my-16 w-11/12 lg:w-3/4 md:w-11/12'>
                     {/* heade todos content */}
                     <div className='flex flex-col md:flex-row  items-center justify-between mb-9'> 
                         <div className='flex items-center'> 
@@ -90,6 +92,7 @@ const TodoList = () => {
         </main>
         {/* create and edit todo modal */}
         <TodoModal itemId={itemId} text={text} setText={setText}/>
+        <DeleteTodoModal itemId={itemId}/>
       </>
     )
 }

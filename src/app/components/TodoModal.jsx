@@ -1,12 +1,19 @@
 import React,{memo,useState,useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {  toast } from 'react-toastify';
+
 import { actions } from '../../actions';
 
 const TodoModal = ({itemId,text,setText}) => {
     const dispatch = useDispatch();
 
+    //get dispaly modal of store 
+    const display = useSelector(state =>  state.modal);
+
     const [textModal,setTextModal] = useState('New');
     const [textButton,setTextButton] = useState('Add');
+    //state for show and hide modal
+    const [show,setShow] = useState('hidden');
 
     useEffect(()=>{
         if(itemId){
@@ -17,24 +24,41 @@ const TodoModal = ({itemId,text,setText}) => {
             setTextButton('Add');
         }
     });
-
+    //close modal
     const cancelModal = () =>{
-        const modal = document.querySelector('.modal');
-        modal.classList.add('hidden');
+        dispatch(actions.modal(display));
         setText('');
         document.body.style.overflow = "auto";
     }
+    //edit and create todo
     const handleSubmit = () => {
-        if(itemId){
-            dispatch(actions.editTodo(text,itemId));
+        if(text){
+            if(itemId){
+                //edit todo
+                dispatch(actions.editTodo(text,itemId));
+            }else{
+                //create todo
+                dispatch(actions.addTodo(text));
+            }
+            //hidden modal
+            dispatch(actions.modal(display));
+            //value text = null
+            setText('');
+            //body overflow auto
+            document.body.style.overflow = "auto";
         }else{
-            dispatch(actions.addTodo(text));
+            toast.error('Please fill in the blank field',{theme: "colored"});
         }
-        setText('');
-        document.body.style.overflow = "auto";
     }
+    useEffect(()=>{
+        //set show and hide modal class
+        if(display)
+            setShow('flex');
+        else
+            setShow('hidden');
+    },[display]);
     return (
-        <div className='modal bg-modalCustom fixed top-0 left-0 right-0 bottom-0 z-20 hidden items-center justify-center'> 
+        <div className={`bg-modalCustom fixed top-0 left-0 right-0 bottom-0 z-20 ${show} items-center justify-center`}> 
             <form 
                 onSubmit={(event)=>event.preventDefault()} 
                 className='w-11/12 md:w-2/3 bg-whiteCustom rounded-3xl p-5'
