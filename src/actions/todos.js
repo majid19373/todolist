@@ -81,8 +81,12 @@ export const deleteTodo = (id,date) => {
             const todos = [...getState().todos];
             const todosIndex = todos.findIndex(item => item.date === date);
             const todoIndex = todos[todosIndex].todolist.findIndex(item => item.id === id);
+            debugger
             if(todoIndex > -1){
                 todos[todosIndex].todolist.splice(todoIndex,1);
+            }
+            if(todos[todosIndex].todolist.length <= 0){
+                todos.splice(todosIndex,1)
             }
             await dispatch({ type: "ADD_TODO", payload: todos });
             localStorage.setItem("todolist", JSON.stringify(todos));
