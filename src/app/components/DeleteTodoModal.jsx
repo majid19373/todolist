@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import { actions } from '../../actions';
 
-const DeleteTodoModal = ({itemId}) => {
+const DeleteTodoModal = ({itemId,itemDate}) => {
     const dispatch = useDispatch();
 
     //get dispaly modal of store 
@@ -17,7 +17,7 @@ const DeleteTodoModal = ({itemId}) => {
     }
     //delete todo
     const deleteModal = () =>{
-        dispatch(actions.deleteTodo(itemId));
+        dispatch(actions.deleteTodo(itemId,itemDate));
         dispatch(actions.deleteModal(displayDelete));
         document.body.style.overflow = "auto";
     }

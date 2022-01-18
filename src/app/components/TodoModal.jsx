@@ -4,7 +4,7 @@ import {  toast } from 'react-toastify';
 
 import { actions } from '../../actions';
 
-const TodoModal = ({itemId,text,setText}) => {
+const TodoModal = ({itemId,itemDate,text,setText}) => {
     const dispatch = useDispatch();
 
     //get dispaly modal of store 
@@ -35,7 +35,7 @@ const TodoModal = ({itemId,text,setText}) => {
         if(text){
             if(itemId){
                 //edit todo
-                dispatch(actions.editTodo(text,itemId));
+                dispatch(actions.editTodo(text,itemId,itemDate));
             }else{
                 //create todo
                 dispatch(actions.addTodo(text));
